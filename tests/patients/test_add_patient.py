@@ -521,7 +521,8 @@ def test_creacion_paciente_con_telefono_exitoso(setup_add_patient):
 
 @pytest.mark.negative
 @pytest.mark.medium
-def test_creacion_paciente_con_telefono_con_letras(setup_add_patient):
+def test_Verificar_error_al_ingresar_letras_al_campo_telephone_number(setup_add_patient):
+    "Este test case verifica que no se puedan ingresar letras en el campo telephone_number al crear un paciente"
     headers, created_patients = setup_add_patient
     payload = PayloadCreatePatients.build_payload_create_patient_with_telephone_fields(headers, fake.word())
     endpoint = EndpointPatients.patient()
