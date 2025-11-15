@@ -127,7 +127,6 @@ def test_verificar_error_al_actualizar_campo_first_name_vacio(setup_add_patient)
 
 @pytest.mark.negative
 @pytest.mark.low
-@pytest.mark.xfail(reason="Known issue BUG: Validación faltante para caracteres especiales en campo 'First name'", run=True)
 def test_verificar_error_al_editar_campo_first_name_con_caracteres_especiales(setup_add_patient):
     headers, created_patients = setup_add_patient
     payload_create = PayloadCreatePatients.build_payload_create_patient(headers)
@@ -141,7 +140,6 @@ def test_verificar_error_al_editar_campo_first_name_con_caracteres_especiales(se
 
 @pytest.mark.negative
 @pytest.mark.low
-@pytest.mark.xfail(reason="Known issue BUG: Validación faltante para caracteres numéricos en campo 'First name'", run=True)
 def test_verificar_error_al_editar_campo_first_name_con_caracteres_numericos(setup_add_patient):
     headers, created_patients = setup_add_patient
     payload_create = PayloadCreatePatients.build_payload_create_patient(headers)
@@ -156,7 +154,6 @@ def test_verificar_error_al_editar_campo_first_name_con_caracteres_numericos(set
 
 @pytest.mark.negative
 @pytest.mark.low
-@pytest.mark.xfail(reason="Known issue BUG: Validación faltante para mas de 255 caracteres en campo 'First name'", run=True)
 def test_verificar_error_al_ingresar_mas_de_255_caracteres_en_campo_first_name(setup_add_patient):
     headers, created_patients = setup_add_patient
     payload_create = PayloadCreatePatients.build_payload_create_patient(headers)
@@ -203,7 +200,6 @@ def test_actualizar_campo_last_name(setup_add_patient):
 
 @pytest.mark.negative
 @pytest.mark.low
-@pytest.mark.xfail(reason="Known issue BUG: Validación faltante para caracteres numéricos en campo 'Last name'", run=True)
 def test_verificar_error_al_editar_campo_last_name_con_caracteres_numericos(setup_add_patient):
     headers, created_patients = setup_add_patient
     payload_create = PayloadCreatePatients.build_payload_create_patient(headers)
@@ -217,7 +213,6 @@ def test_verificar_error_al_editar_campo_last_name_con_caracteres_numericos(setu
 
 @pytest.mark.negative
 @pytest.mark.low
-@pytest.mark.xfail(reason="Known issue BUG: Validación faltante para caracteres especiales en campo 'Last name'", run=True)
 def test_verificar_error_al_editar_campo_last_name_con_caracteres_especiales(setup_add_patient):
     headers, created_patients = setup_add_patient
     payload_create = PayloadCreatePatients.build_payload_create_patient(headers)
@@ -277,7 +272,6 @@ def test_verificar_error_al_actualizar_campo_middle_name_vacio(setup_add_patient
 
 @pytest.mark.negative
 @pytest.mark.low
-@pytest.mark.xfail(reason="Known issue BUG: Validación faltante para caracteres numéricos en campo 'Middle name'", run=True)
 def test_verificar_error_al_editar_campo_middle_name_con_caracteres_numericos(setup_add_patient):
     headers, created_patients = setup_add_patient
     payload_create = PayloadCreatePatients.build_payload_create_patient(headers)
@@ -291,7 +285,6 @@ def test_verificar_error_al_editar_campo_middle_name_con_caracteres_numericos(se
 
 @pytest.mark.negative
 @pytest.mark.low
-@pytest.mark.xfail(reason="Known issue BUG: Validación faltante para caracteres especiales en campo 'Middle name'", run=True)
 def test_verificar_error_al_editar_campo_middle_name_con_caracteres_especiales(setup_add_patient):
     headers, created_patients = setup_add_patient
     payload_create = PayloadCreatePatients.build_payload_create_patient(headers)
@@ -452,7 +445,6 @@ def test_actualizar_campo_address_con_numeros(setup_add_patient):
 
 @pytest.mark.negative
 @pytest.mark.low
-@pytest.mark.xfail(reason="Known issue BUG: Validación faltante para caracteres especiales en el campo 'Address1'", run=True)
 def test_actualizar_campo_address_con_puros_caracteres_especiales(setup_add_patient):
     headers, created_patients = setup_add_patient
     payload_create = PayloadCreatePatients.build_payload_create_patient_with_optional_fields(headers)
