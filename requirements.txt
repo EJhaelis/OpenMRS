@@ -1,0 +1,9 @@
+Faker==37.5.3
+pytest==7.4.0
+requests==2.32.4
+pytest-html==4.0.0
+python-dotenv==1.1.1
+jsonschema==4.19.0
+jsonschema-specifications==2025.4.1
+allure-pytest==2.15.0
+allure-python-commons==2.15.0
