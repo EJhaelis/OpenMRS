@@ -8,3 +8,4 @@ __pycache__/
 .idea/
 __pypackages__/
 reports
+report.html

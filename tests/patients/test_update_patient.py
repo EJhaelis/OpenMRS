@@ -5,6 +5,7 @@ import random
 from faker import Faker
 from src.routes.endpoint_patients import EndpointPatients
 from src.assertions.status_code_assertions import AssertionStatusCode
+from src.assertions.patient_assertions import AssertionPatients
 from tests.patients.conftest import create_patient, build_full_name
 from utils.logger_helpers import log_request_response
 from src.routes.request import OpenMrsRequest
@@ -59,6 +60,7 @@ def test_verificar_actualizacion_de_paciente_exitosa(setup_add_patient):
     family_name_updated = response_update_json["person"]["display"]
     assert family_name_updated == family_name_request
     log_request_response(endpoint_update, response_update, headers)
+    AssertionPatients.assert_patient_update_output_schema(response_update.json())
     created_patients.append(response_update.json())
 
 @pytest.mark.negative
@@ -110,6 +112,7 @@ def test_actualizar_campo_first_name(setup_add_patient):
     family_name_updated = response_update_json["person"]["display"]
     assert family_name_updated == family_name_request
     log_request_response(endpoint_update, response_update, headers)
+    AssertionPatients.assert_patient_update_output_schema(response_update.json())
     created_patients.append(response_update.json())
 
 @pytest.mark.negative
@@ -120,6 +123,19 @@ def test_verificar_error_al_actualizar_campo_first_name_vacio(setup_add_patient)
     response_create_json = create_patient(headers, payload_create)
     patient_code = response_create_json["uuid"]
     payload_update = PayloadUpdatePatients.build_payload_update_patient_custom(patient_code, payload_create, "")
+    endpoint_update = EndpointPatients.code(patient_code)
+    response_update = OpenMrsRequest.post(endpoint_update, headers, payload_update)
+    AssertionStatusCode.assert_status_code_is_error(response_update)
+    log_request_response(endpoint_update, response_update, headers)
+
+@pytest.mark.negative
+@pytest.mark.low
+def test_verificar_error_al_actualizar_campo_last_name_vacio(setup_add_patient):
+    headers, created_patients = setup_add_patient
+    payload_create = PayloadCreatePatients.build_payload_create_patient(headers)
+    response_create_json = create_patient(headers, payload_create)
+    patient_code = response_create_json["uuid"]
+    payload_update = PayloadUpdatePatients.build_payload_update_patient_custom(patient_code, payload_create, None, "")
     endpoint_update = EndpointPatients.code(patient_code)
     response_update = OpenMrsRequest.post(endpoint_update, headers, payload_update)
     AssertionStatusCode.assert_status_code_is_error(response_update)
@@ -183,20 +199,21 @@ def test_actualizar_campo_last_name(setup_add_patient):
     family_name_updated = response_update_json["person"]["display"]
     assert family_name_updated == family_name_request
     log_request_response(endpoint_update, response_update, headers)
+    AssertionPatients.assert_patient_update_output_schema(response_update.json())
     created_patients.append(response_update.json())
 
-# @pytest.mark.negative
-# @pytest.mark.low
-# def test_verificar_error_al_actualizar_campo_last_name_vacio(setup_add_patient):
-#     headers, created_patients = setup_add_patient
-#     payload_create = PayloadCreatePatients.build_payload_create_patient(headers)
-#     response_create_json = create_patient(headers, payload_create)
-#     patient_code = response_create_json["uuid"]
-#     payload_update = PayloadUpdatePatients.build_payload_update_patient_custom(patient_code, payload_create, None, None, " ")
-#     endpoint_update = EndpointPatients.code(patient_code)
-#     response_update = OpenMrsRequest.post(endpoint_update, headers, payload_update)
-#     AssertionStatusCode.assert_status_code_is_error(response_update)
-#     log_request_response(endpoint_update, response_update, headers)
+@pytest.mark.negative
+@pytest.mark.low
+def test_verificar_error_al_actualizar_campo_last_name_vacio(setup_add_patient):
+    headers, created_patients = setup_add_patient
+    payload_create = PayloadCreatePatients.build_payload_create_patient(headers)
+    response_create_json = create_patient(headers, payload_create)
+    patient_code = response_create_json["uuid"]
+    payload_update = PayloadUpdatePatients.build_payload_update_patient_custom(patient_code, payload_create, None, None, " ")
+    endpoint_update = EndpointPatients.code(patient_code)
+    response_update = OpenMrsRequest.post(endpoint_update, headers, payload_update)
+    AssertionStatusCode.assert_status_code_is_error(response_update)
+    log_request_response(endpoint_update, response_update, headers)
 
 @pytest.mark.negative
 @pytest.mark.low
@@ -255,6 +272,7 @@ def test_actualizar_campo_middle_name(setup_add_patient):
     family_name_updated = response_update_json["person"]["display"]
     assert family_name_updated == family_name_request
     log_request_response(endpoint_update, response_update, headers)
+    AssertionPatients.assert_patient_update_output_schema(response_update.json())
     created_patients.append(response_update.json())
 
 @pytest.mark.negative
@@ -269,6 +287,8 @@ def test_verificar_error_al_actualizar_campo_middle_name_vacio(setup_add_patient
     response_update = OpenMrsRequest.post(endpoint_update, headers, payload_update)
     AssertionStatusCode.assert_status_code_200(response_update)
     log_request_response(endpoint_update, response_update, headers)
+    AssertionPatients.assert_patient_update_output_schema(response_update.json())
+    created_patients.append(response_update.json())
 
 @pytest.mark.negative
 @pytest.mark.low
@@ -333,6 +353,7 @@ def test_actualizar_todos_los_campos_de_basic_info(setup_add_patient):
     family_name_updated = response_update_json["person"]["display"]
     assert family_name_updated == family_name_request
     log_request_response(endpoint_update, response_update, headers)
+    AssertionPatients.assert_patient_update_output_schema(response_update.json())
     created_patients.append(response_update.json())
 
 @pytest.mark.functional
@@ -354,6 +375,7 @@ def test_actualizar_campo_birthdate(setup_add_patient):
     birthdate_updated = response_update_json["person"]["birthdate"]
     assert birthdate_updated == birthdate_request
     log_request_response(endpoint_update, response_update, headers)
+    AssertionPatients.assert_patient_update_output_schema(response_update.json())
     created_patients.append(response_update.json())
 
 @pytest.mark.negative
@@ -405,6 +427,7 @@ def test_actualizar_campo_address(setup_add_patient):
     response_update = OpenMrsRequest.post(endpoint_update, headers, payload_update)
     AssertionStatusCode.assert_status_code_200(response_update)
     log_request_response(endpoint_update, response_update, headers)
+    AssertionPatients.assert_patient_update_output_schema(response_update.json())
     created_patients.append(response_update.json())
 
 @pytest.mark.negative

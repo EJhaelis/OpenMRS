@@ -2,6 +2,7 @@ import pytest
 
 from faker import Faker
 from src.routes.endpoint_patients import EndpointPatients
+from src.assertions.patient_assertions import AssertionPatients
 from src.assertions.status_code_assertions import AssertionStatusCode
 from utils.logger_helpers import log_request_response
 from src.routes.request import OpenMrsRequest
@@ -24,6 +25,7 @@ def test_busqueda_paciente_exitosa_por_uuid(setup_add_patient):
     response = OpenMrsRequest.get(EndpointPatients.code(options_code), headers)
     AssertionStatusCode.assert_status_code_200(response)
     log_request_response(endpoint, response, headers)
+    AssertionPatients.assert_patient_get_output_schema(response.json())
     created_patients.append(create_response.json())
 
 @pytest.mark.negative
@@ -71,6 +73,7 @@ def test_busqueda_paciente_exitosa_por_identifier(setup_add_patient):
     response = OpenMrsRequest.get(endpoint, headers)
     AssertionStatusCode.assert_status_code_200(response)
     log_request_response(endpoint, response, headers)
+    AssertionPatients.assert_patient_search_output_schema(response.json())
     created_patients.append(create_response.json())
 
 @pytest.mark.negative
@@ -83,6 +86,7 @@ def test_busqueda_paciente_por_identifier_inexistente(setup_add_patient):
     AssertionStatusCode.assert_status_code_200(response)
     assert response.json()["results"] == []
     log_request_response(endpoint, response, headers)
+    AssertionPatients.assert_patient_search_output_schema(response.json())
 
 @pytest.mark.functional
 @pytest.mark.high
@@ -100,6 +104,7 @@ def test_busqueda_paciente_exitosa_por_nombre(setup_add_patient):
     response = OpenMrsRequest.get(endpoint, headers)
     AssertionStatusCode.assert_status_code_200(response)
     log_request_response(endpoint, response, headers)
+    AssertionPatients.assert_patient_search_output_schema(response.json())
     created_patients.append(create_response.json())
 
 
@@ -113,6 +118,7 @@ def test_busqueda_paciente_por_nombre_inexistente(setup_add_patient):
     AssertionStatusCode.assert_status_code_200(response)
     assert response.json()["results"] == []
     log_request_response(endpoint, response, headers)
+    AssertionPatients.assert_patient_search_output_schema(response.json())
 
 @pytest.mark.functional
 @pytest.mark.high
@@ -130,6 +136,7 @@ def test_busqueda_paciente_exitosa_por_apellido(setup_add_patient):
     response = OpenMrsRequest.get(endpoint, headers)
     AssertionStatusCode.assert_status_code_200(response)
     log_request_response(endpoint, response, headers)
+    AssertionPatients.assert_patient_search_output_schema(response.json())
     created_patients.append(create_response.json())
 
 @pytest.mark.negative
@@ -142,6 +149,7 @@ def test_busqueda_paciente_exitosa_por_apellido_inexistente(setup_add_patient):
     AssertionStatusCode.assert_status_code_200(response)
     assert response.json()["results"] == []
     log_request_response(endpoint, response, headers)
+    AssertionPatients.assert_patient_search_output_schema(response.json())
 
 @pytest.mark.functional
 @pytest.mark.high
@@ -166,6 +174,6 @@ def test_busqueda_varios_pacientes_exitosa(setup_add_patient):
     AssertionStatusCode.assert_status_code_200(response)
     log_request_response(endpoint, response, headers)
     assert len(response.json()["results"]) >= 1
-
+    AssertionPatients.assert_patient_search_output_schema(response.json())
     created_patients.append(create_response_one.json())
     created_patients.append(create_response_two.json())

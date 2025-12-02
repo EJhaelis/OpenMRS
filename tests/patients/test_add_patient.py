@@ -3,6 +3,8 @@ import string
 import random
 
 from faker import Faker
+
+from src.assertions.patient_assertions import AssertionPatients
 from src.routes.endpoint_patients import EndpointPatients
 from src.assertions.status_code_assertions import AssertionStatusCode
 from utils.logger_helpers import log_request_response
@@ -39,6 +41,7 @@ def test_creacion_paciente_exitosa_con_todos_campos_obligatorios(setup_add_patie
     response = OpenMrsRequest.post(endpoint, headers, payload)
     log_request_response(endpoint, response, headers)
     AssertionStatusCode.assert_status_code_201(response)
+    AssertionPatients.assert_patient_create_output_schema(response.json())
     created_patients.append(response.json())
 
 @pytest.mark.functional
@@ -50,6 +53,7 @@ def test_creacion_paciente_exitosa_con_segundo_nombre(setup_add_patient):
     response = OpenMrsRequest.post(endpoint, headers, payload)
     log_request_response(endpoint, response, headers)
     AssertionStatusCode.assert_status_code_201(response)
+    AssertionPatients.assert_patient_create_output_schema(response.json())
     created_patients.append(response.json())
 
 @pytest.mark.negative
@@ -73,6 +77,7 @@ def test_creacion_paciente_sin_segundo_nombre(setup_add_patient):
     response = OpenMrsRequest.post(endpoint, headers, payload)
     log_request_response(endpoint, response, headers)
     AssertionStatusCode.assert_status_code_201(response)
+    AssertionPatients.assert_patient_create_output_schema(response.json())
     created_patients.append(response.json())
 
 @pytest.mark.negative
@@ -83,7 +88,7 @@ def test_creacion_paciente_sin_apellido(setup_add_patient):
     endpoint = EndpointPatients.patient()
     response = OpenMrsRequest.post(endpoint, headers, payload)
     log_request_response(endpoint, response, headers)
-    AssertionStatusCode.assert_status_code_201(response)
+    AssertionStatusCode.assert_status_code_400(response)
     created_patients.append(response.json())
 
 @pytest.mark.boundary
@@ -97,6 +102,7 @@ def test_creacion_paciente_con_nombre_con_50_caracteres(setup_add_patient):
     response = OpenMrsRequest.post(endpoint, headers, payload)
     log_request_response(endpoint, response, headers)
     AssertionStatusCode.assert_status_code_201(response)
+    AssertionPatients.assert_patient_create_output_schema(response.json())
     created_patients.append(response.json())
 
 
@@ -123,6 +129,7 @@ def test_creacion_paciente_con_segundo_nombre_con_50_caracteres(setup_add_patien
     response = OpenMrsRequest.post(endpoint, headers, payload)
     log_request_response(endpoint, response, headers)
     AssertionStatusCode.assert_status_code_201(response)
+    AssertionPatients.assert_patient_create_output_schema(response.json())
     created_patients.append(response.json())
 
 @pytest.mark.boundary
@@ -148,6 +155,7 @@ def test_creacion_paciente_con_apellido_con_50_caracteres(setup_add_patient):
     response = OpenMrsRequest.post(endpoint, headers, payload)
     log_request_response(endpoint, response, headers)
     AssertionStatusCode.assert_status_code_201(response)
+    AssertionPatients.assert_patient_create_output_schema(response.json())
     created_patients.append(response.json())
 
 @pytest.mark.boundary
@@ -256,6 +264,7 @@ def test_verificar_crear_paciente_con_genero_masculino(setup_add_patient):
     log_request_response(endpoint, response, headers)
     AssertionStatusCode.assert_status_code_201(response)
     assert response.json()['person']['gender'] == "M"
+    AssertionPatients.assert_patient_create_output_schema(response.json())
     created_patients.append(response.json())
 
 @pytest.mark.functional
@@ -268,6 +277,7 @@ def test_verificar_crear_paciente_con_genero_femenino(setup_add_patient):
     log_request_response(endpoint, response, headers)
     AssertionStatusCode.assert_status_code_201(response)
     assert response.json()['person']['gender'] == "F"
+    AssertionPatients.assert_patient_create_output_schema(response.json())
     created_patients.append(response.json())
 
 @pytest.mark.functional
@@ -280,6 +290,7 @@ def test_verificar_crear_paciente_con_genero_otro(setup_add_patient):
     log_request_response(endpoint, response, headers)
     AssertionStatusCode.assert_status_code_201(response)
     assert response.json()['person']['gender'] == "O"
+    AssertionPatients.assert_patient_create_output_schema(response.json())
     created_patients.append(response.json())
 
 @pytest.mark.functional
@@ -292,6 +303,7 @@ def test_verificar_crear_paciente_con_genero_desconocido(setup_add_patient):
     log_request_response(endpoint, response, headers)
     AssertionStatusCode.assert_status_code_201(response)
     assert response.json()['person']['gender'] == "U"
+    AssertionPatients.assert_patient_create_output_schema(response.json())
     created_patients.append(response.json())
 
 @pytest.mark.negative
@@ -315,6 +327,7 @@ def test_creacion_paciente_con_fecha_de_nacimiento_conocida_exitosa(setup_add_pa
     log_request_response(endpoint, response, headers)
     AssertionStatusCode.assert_status_code_201(response)
     assert response.json()['person']['birthdate'] is not None
+    AssertionPatients.assert_patient_create_output_schema(response.json())
     created_patients.append(response.json())
 
 @pytest.mark.negative
@@ -338,6 +351,7 @@ def test_creacion_paciente_con_fecha_de_nacimiento_null_exitosa(setup_add_patien
     log_request_response(endpoint, response, headers)
     AssertionStatusCode.assert_status_code_201(response)
     assert response.json()['person']['birthdate'] is None
+    AssertionPatients.assert_patient_create_output_schema(response.json())
     created_patients.append(response.json())
 
 @pytest.mark.negative
@@ -384,6 +398,7 @@ def test_creacion_paciente_con_direccion_exitosa(setup_add_patient):
     log_request_response(endpoint, response, headers)
     AssertionStatusCode.assert_status_code_201(response)
     assert response.json()["person"]['preferredAddress']['display'] is not None
+    AssertionPatients.assert_patient_create_output_schema(response.json())
     created_patients.append(response.json())
 
 @pytest.mark.negative
@@ -410,6 +425,7 @@ def test_creacion_paciente_con_pais_exitosa(setup_add_patient):
     response = OpenMrsRequest.post(endpoint, headers, payload)
     log_request_response(endpoint, response, headers)
     AssertionStatusCode.assert_status_code_201(response)
+    AssertionPatients.assert_patient_create_output_schema(response.json())
     created_patients.append(response.json())
 
 @pytest.mark.negative
@@ -436,6 +452,7 @@ def test_creacion_paciente_con_ciudad_exitosa(setup_add_patient):
     response = OpenMrsRequest.post(endpoint, headers, payload)
     log_request_response(endpoint, response, headers)
     AssertionStatusCode.assert_status_code_201(response)
+    AssertionPatients.assert_patient_create_output_schema(response.json())
     created_patients.append(response.json())
 
 @pytest.mark.negative
@@ -462,6 +479,7 @@ def test_creacion_paciente_con_provincia_exitosa(setup_add_patient):
     response = OpenMrsRequest.post(endpoint, headers, payload)
     log_request_response(endpoint, response, headers)
     AssertionStatusCode.assert_status_code_201(response)
+    AssertionPatients.assert_patient_create_output_schema(response.json())
     created_patients.append(response.json())
 
 @pytest.mark.negative
@@ -489,6 +507,7 @@ def test_creacion_paciente_con_provincia_exitosa(setup_add_patient):
     response = OpenMrsRequest.post(endpoint, headers, payload)
     log_request_response(endpoint, response, headers)
     AssertionStatusCode.assert_status_code_201(response)
+    AssertionPatients.assert_patient_create_output_schema(response.json())
     created_patients.append(response.json())
 
 @pytest.mark.negative
@@ -517,12 +536,12 @@ def test_creacion_paciente_con_telefono_exitoso(setup_add_patient):
     log_request_response(endpoint, response, headers)
     AssertionStatusCode.assert_status_code_201(response)
     assert response.json()["person"]['attributes'][0]['display'] is not None
+    AssertionPatients.assert_patient_create_output_schema(response.json())
     created_patients.append(response.json())
 
 @pytest.mark.negative
 @pytest.mark.medium
 def test_Verificar_error_al_ingresar_letras_al_campo_telephone_number(setup_add_patient):
-    "Este test case verifica que no se puedan ingresar letras en el campo telephone_number al crear un paciente"
     headers, created_patients = setup_add_patient
     payload = PayloadCreatePatients.build_payload_create_patient_with_telephone_fields(headers, fake.word())
     endpoint = EndpointPatients.patient()
